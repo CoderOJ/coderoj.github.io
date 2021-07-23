@@ -6,14 +6,18 @@
   <script src="/js/element.js"></script>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.0/build/styles/atom-one-light.min.css">
   <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.0/build/highlight.min.js"></script>
-  <script src="/js/crypto-js.min.js"></script>
+  <title>
+      test generating - Jacder's blog
+  </title>
 </head>
 
 <body>
   <script>
     window.onload = function() {
-      hljs.configure({ tabReplace: '  ' });
+      loadMath();
       drawSaying();
+      hljs.configure({ tabReplace: '  ' });
+      hljs.initHighlighting()
     }
   </script>
 
@@ -147,53 +151,21 @@ Jacder's blog
 
     <div class="post" id="post">
 
-      <title> 被加密的文章 - Jacder's blog </title>
+      <h1 id="test-generating">test generating</h1>
 
-      
+      <br>
+<HR class="hr-line">
 
-      
+<div style="font-size: 12px; display: flex;">
+  <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+    <img alt="Creative Commons License" style="border-width:0" src="/images/cc-by-sa.png" />
+  </a>
+  <div style="margin-left: 10px;">
+    This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"> Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+  </div>
+</div>
 
-      
-      
-      
 
-      <h2> 被加密的内容 </h2>
-
-      <form onsubmit="verify()">
-        <span> 输入密码以查看：</span>
-        <input class="underline-input" id="password" type="password">
-        <input class="gradual-button" type="submit" value="submit">
-      </form>
-
-      <script>
-        passwdMd5 = "9b0c1ac0c8c2813e2b2a004177f4256b"
-        encryptedBlog = "Tq4M5aFS8lc34LLo7mbNd0L5R/nw23GhgQ1wKAcNSsltyXd2sXZCNexWDBHz88nAnwMzVA2SpGG6yCv3/HxhgYKBeJtQdlKDaQaJWaI11DK2EmXzNWqEdtOjUpK3UkP0Slg0atYftcUeh3PBX5ws/ELsF2YkvOYCmcW7ex8LA3DIfYmZuFthhUBfuqOge1SG8RKplqFvV0gslh789HOJXBG0BG7yayBRYYFD7U81gFVpWp0hhpmLjOAWUZIdikbUiwYjcD3aGimY7LQHDVe4yPZwCfBXNh9P9CfFEW+qgzXd/Wc99ujac6i7mZOSUgnzBBTQX+O169qwFaGRZpbeuoSt6W9xfGYleKPp70qqaplQkmhzPps3mKVWzQgTyW92zKjoJGRd76PM0tQetWQARZuJEk7BY634CfY4Et9CL1PNjKUlc5XQ095WyfZjyJ8kIecU5QPqLcM9jk7VY5zMwZNiZWQeAsYXBnadJoq4Lej4PVEOPqqkJJwt+l7Lcva1Jz6jfB6r7NKdkuoiSEuLvCkukBKCt1yIyoFdIVQ5MTUOBmSvsrkDJVxl6FYnZ6l1l7UR4XFHkstigz0nD1DxnIhaFJ1FzVhYi9tyrSLPsQ3w28Gt8DkMGtncJDJ9PjphdhRunmIYv3UXQhCB4giGPRzOUmTJkVaRLQehfyrYGCs8EJ690O1ixfM0edJ83uCOLSfX+LRTnurxX0ry/hlU3CSgIHoM+mFKc//hP4Mxx7qbqw6LsY8WgFGEanQZrBftcmNA/qMk3JJ2Gkb8u2T3vihy8g5xNcpv5hUnlFbgGAA/85jxoZ+S4EFEBd3v+w6+MhIgTodGKaJEDj0b0BUN7ZYtoYIDzWNSk57yerjaa0lbRSP1n4QkOvvD9oX3bdf2K07J7SxYMJceK4i3vlOQ8YfR69eFwchqSPJ9/hUxOGtiuU/O/T5NIjd1WnEd3OjjZL6DTVgBmtKZzAkYFJo9rSIq1g8c5XeqKKM/x4IziS3hgeiOJ7dhAcGO+59KYQ689hjMuN1d89FDyCw8YsCmIx15qnNMWbV4H+ge/0b73SPF8PlC+iu3waul66NHGiDpM/M2ZdXa5bewgvT2s9Qe8byMlbC1+z/PNcaOZKD++iumKtQSgWrFQfaJLqFXLmqdPL9utuobOEG0eVl/Q+fo4BLm44SeVcl/qtNp+nBridq8n57z+gM1pjanuPlZ3lRB6j+MN91den7fmsKI3V+QparrYOhRfjcu1B/Zs08tlqviigTUv7qC2uMPfDmrdvUHJ977jnXr/0xl6ygN3q/DQBPQ2PeffmE6JzvBjK9jAov5JM1Xrk47BD5nxq8CGmhtxljC7rANNZtZwGgxfJphMatTE2sv4j1MNhWdxKCDIehbp+ZSU7RbBKwI6Xx/xF3TYlzayGxrive/PQSTRry0x27XTLi77AvXbmS8i1Y+ahy0OEmI+NPbpC4LwsFsZ8eL7duxOU6rIghUZaDDF0hw0F2FcJLteaSYCvfErx2gtpGrYAbxf519xLr3Fd2S4g902MwwVd6md0lo3M4t4k6tAOwkn1EKs7T7FP5wt/oHZWFoG0Y/eFJFIQqgnbS+3Z1Ay4wQsMLepBSV18bJXJgwJp0MKiSlHWeN1aT3A3rtfulSrFpdy8VKtTcM7Hmdp8pQef6c1BR9W9LvTk9jH8JMgol2vhQzF47y8MziAQy3UJ5vpNJ4raf0PVzh5nILLsOgHGA0QaiaYcNeZIgHHfnYS1qS4Dp9BLuSJYrm2mWOorG/WaXW3Vg2Kb+01N9DNuKcyYm8TvIC2e4gsaTfAZgAY5IFTeppu5mCrem0QTvRqh9W8gAtWCKNFYw5Lju71ykFLGul9GUDWQtA60qKHZvNm5rokt05uCXaWcgx0eX9FsZkWrRqRxyAUyRj38OoF89XNI7bfYiKTQO17q6CMvs3QxW7oaam5PoaJB1+RDR1P3RxrVpOLcr2GE/eTFyL1XZt"
-
-        function verify() {
-          let passwd = document.getElementById("password").value
-          if (passwd == "") {
-            alert("please enter password!")
-            return
-          }
-          passwd = CryptoJS.MD5(passwd).toString().substr(0,16)
-          if (CryptoJS.MD5(passwd).toString() !== passwdMd5) {
-            alert("password incorret")
-            return
-          }
-          let key = CryptoJS.enc.Utf8.parse(passwd)
-          decrypted = CryptoJS.AES.decrypt(encryptedBlog, key, {
-            iv: key,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-          })
-          decrypted = CryptoJS.enc.Utf8.stringify(decrypted)
-          let DOMPost = document.getElementById("post")
-          DOMPost.innerHTML = decrypted
-
-          loadMath()
-          hljs.initHighlighting()
-        }
-      </script>
     </div>
 
   </div>
