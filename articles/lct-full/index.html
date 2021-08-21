@@ -195,9 +195,9 @@ Jacder's blog
 <p><strong>注意</strong>：原树的根可能不是辅助树的根。</p>
 <p>一个辅助树的例子：</p>
 <p>如图，现在有⼀棵原树，加粗边是实边，虚线边是虚边。</p>
-<p><img src="./images/lct9.png" alt=""></p>
+<p><img src="./lct9.png" alt=""></p>
 <p>由刚刚的定义，一棵可能的辅助树结构如下</p>
-<p><img src="./images/lct10.png" alt=""></p>
+<p><img src="./lct10.png" alt=""></p>
 <p>辅助树有如下性质：</p>
 <ul>
 <li>原树中的某条实链上的点，在辅助树中对应节点都在一棵 Splay 中。</li>
@@ -249,27 +249,27 @@ void split(LCTNode *u, LCTNode *v);
 <h5 id="access">access</h5>
 <p><code>access</code> 的功能是将该结点到根上的所有边变为实边，并将这个点的所有儿子变为虚儿子 。</p>
 <p>假设我们有这样一棵树，实线为实边，虚线为虚边。</p>
-<p><img src="./images/lct1.png" alt=""></p>
+<p><img src="./lct1.png" alt=""></p>
 <p>它的辅助树可能长成这样，每个绿框里是一棵 Splay。</p>
-<p><img src="./images/lct2.png" alt=""></p>
+<p><img src="./lct2.png" alt=""></p>
 <p>现在我们要进行 <code>N-&gt;access()</code>, 把 $A$ 到 $N$ 路径上的边都变为实边，拉成一棵 Splay。</p>
-<p><img src="./images/lct3.png" alt=""></p>
+<p><img src="./lct3.png" alt=""></p>
 <p>实现的方法是从下到上逐步更新 Splay。</p>
 <p>首先我们要把 $N$ 旋至当前 Splay 的根。</p>
 <p>为了保证辅助树的性质，原来 $N$ 到 $O$ 的实边要更改为虚边。</p>
 <p>由于认父不认子的性质，我们可以单方面的把 $N$ 的儿子改为空。</p>
 <p>于是原来的辅助树就从下图变成了下下图。</p>
-<p><img src="./images/lct4.png" alt=""></p>
-<p><img src="./images/lct5.png" alt=""></p>
+<p><img src="./lct4.png" alt=""></p>
+<p><img src="./lct5.png" alt=""></p>
 <p>下一步，我们把 $N$ 的父亲 $I$ 也旋转到根。</p>
 <p>原来的实边 $I \to K$ 要去掉，这时候我们把 $I$ 的右儿子指向 $N$, 就得到了 $I$—$L$ 这样一棵 Splay。</p>
-<p><img src="./images/lct8.png" alt=""></p>
+<p><img src="./lct8.png" alt=""></p>
 <p>接下来，按照刚刚的操作步骤，由于 $I$ 的父亲为 $H$, 我们把 $H$ 旋转到他所在 Splay 的根，然后把 $H$ 的 <strong>右儿子</strong> 设为 $I$。</p>
 <p>之后的树是这样的：</p>
-<p><img src="./images/lct6.png" alt=""></p>
+<p><img src="./lct6.png" alt=""></p>
 <p>同理我们将 A 旋转到根， 并把 $A$ 的右儿子指向 $H$。</p>
 <p>于是我们得到了这样一棵辅助树。并且发现 $A \to N$ 的整个路径已经在同一棵 Splay 中了。大功告成！</p>
-<p><img src="./images/lct7.png" alt=""></p>
+<p><img src="./lct7.png" alt=""></p>
 <p>代码实现：</p>
 <pre><code class="lang-cpp">void LCTNode::access() {
   Node *uu = this, *ss = nullptr;
@@ -525,7 +525,7 @@ int main() {
     scanf(&quot;%d&quot;, &amp;p[i].val);
   }
 
-  for (int i=0; i&lt;m; ++i) {
+  for (int i = 0; i &lt; m; ++i) {
     int opt, u, v;
     scanf(&quot;%d%d%d&quot;, &amp;opt, &amp;u, &amp;v);
 
@@ -554,9 +554,9 @@ int main() {
 <p>LCT 的辅助树只能方便的维护点的信息，不能维护边的信息。</p>
 <p>如果题目要求维护边的信息，则可以采用边转点的技巧，即对于每一条边，新增一个点记录边上的信息。</p>
 <p>假如有如下原树：</p>
-<p><img src="images/e2v_0.png" alt=""></p>
+<p><img src="./e2v_0.png" alt=""></p>
 <p>边转点以后得到：</p>
-<p><img src="images/e2v_1.png" alt=""></p>
+<p><img src="./e2v_1.png" alt=""></p>
 <h3 id="%E7%BB%B4%E6%8A%A4%E5%AD%90%E6%A0%91%E4%BF%A1%E6%81%AF">维护子树信息</h3>
 <p>查询原树子树信息需要在每个结点上记录其虚儿子的信息，并在虚实链切换时维护这些信息。</p>
 <p>与普通 LCT 不同，维护子树信息的 LCT 需要在每个结点上维护一下信息（以子树和为例）：</p>
