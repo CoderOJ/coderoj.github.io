@@ -4,8 +4,9 @@
   <link rel="stylesheet" type="text/css" href="/css/art.css">
   <link rel="icon" type="images/png" href="/images/favicon.png">
   <script src="/js/element.js"></script>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.0/build/styles/atom-one-light.min.css">
-  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.4.0/build/highlight.min.js"></script>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css">
+  <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"></script>
+  <script src="/js/language.min.js"></script>
   <title>
     毒瘤题选做 - Jacder's blog
   </title>
@@ -17,7 +18,7 @@
       loadMath();
       drawSaying();
       hljs.configure({ tabReplace: '  ' });
-      hljs.initHighlighting()
+      hljs.highlightAll()
     }
   </script>
 
@@ -152,7 +153,6 @@ Jacder's blog
     <div class="post" id="post">
 
       <p>放假这几天不如写点毒瘤题</p>
-<p><del>为了避免过于毒瘤，就不贴代码了</del></p>
 <h1 id="-boj19017-automorphism-https-www-acmicpc-net-problem-19017"><a href="https://www.acmicpc.net/problem/19017">BOJ19017 Automorphism</a></h1>
 <p>xza 课间上的题，似乎他自己都没写过。</p>
 <h2 id="description">Description</h2>
@@ -169,7 +169,391 @@ Jacder's blog
 <p>考虑常规的树哈希方式：用子树哈希值作为关键字将儿子排序，然后在 dfs 序上每个点对应的位置放上这个点的深度，然后做序列哈希。由于子树哈希值的变化会导致儿子顺序的改变，无法快速维护。考虑重链天然的性质，如果我们以子树大小为第一关键字，子树哈希值为第二关键字排序，那么重儿子的修改一定不会导致儿子顺序的变化，因此可以用 $O(1)$ 的信息标记一次修改，并且标记可以 $O(1)$ 合并。</p>
 <p>具体的，我们还要对每个结点维护一棵平衡树记录该结点所有轻儿子的哈希值。这样便可以在 $O(\log n)$ 对一条轻边进行更新，同时可以 $O(\log n)$ 查询更新前后同构子树的数量。</p>
 <p>重链剖分可以通过 LCT 动态维护，注意此时一条重链在 LCT 上对应一个联通块而非一棵 splay，否则无法进行 access</p>
-<p><a href="https://www.acmicpc.net/source/32233708">AC 记录</a> <del>不过似乎要过了才能看</del></p>
+<p><a href="https://www.acmicpc.net/source/32233708">AC 记录</a> 不过似乎要过了才能看，那就下面贴一下。</p>
+<details>
+<summary> code </summary>
+  <!-- {{{ -->
+<pre><code class="lang-cpp">#include &quot;/home/jack/code/creats/gpl.hpp&quot;
+
+#include &lt;bits/stdc++.h&gt;
+
+#include &quot;/home/jack/code/creats/Scanner.hpp&quot;
+#include &quot;/home/jack/code/creats/log.hpp&quot;
+// #include &quot;/home/jack/code/creats/range.hpp&quot;
+#include &quot;/home/jack/code/creats/util.hpp&quot;
+// #include &quot;/home/jack/code/creats/Vector.hpp&quot;
+
+// #include &quot;/home/jack/code/creats/STree.hpp&quot;
+// #include &quot;/home/jack/code/creats/Tree.hpp&quot;
+// #include &quot;/home/jack/code/creats/Graph.hpp&quot;
+#define INTM_FAST_64 long long
+#include &quot;/home/jack/code/creats/Intm.hpp&quot;
+// #include &quot;/home/jack/code/Math/Poly/main.h&quot;
+
+
+// #define MULTIPLE_TEST_CASES_WITH_T
+// #define MULTIPLE_TEST_CASES_WITHOUT_T
+#include &quot;/home/jack/code/creats/body.h&quot;
+// #define int long long
+
+/** My code begins here **/
+
+constexpr int MOD = 998244353;
+constexpr int N = 300005;
+using Int = Temps::Intm&lt;MOD&gt;;
+Int inv[N];
+uint64_t hash_cpow[N];
+
+template &lt;class T, size_t N&gt;
+struct pool_allocator
+{
+  T pool[N], *pos = pool;
+  T *allocate()
+  {
+    return pos++;
+  }
+};
+
+using hash_val_t = uint64_t;
+using hash_ord_t = std::pair&lt;size_t, hash_val_t&gt;;
+hash_ord_t hash_join(hash_ord_t a, hash_ord_t b)
+{
+  return hash_ord_t(a.first + b.first,
+                    a.second + hash_cpow[a.first] * b.second);
+}
+hash_ord_t hash_det(hash_ord_t a, hash_ord_t b)
+{
+  return hash_ord_t(b.first - a.first,
+                    b.second - a.second * hash_cpow[b.first - a.first]);
+}
+
+struct ftreap_node_t
+{
+  constexpr static auto ord_cmp = std::greater&lt;hash_ord_t&gt;();
+  static std::mt19937_64 rand_eng;
+  static pool_allocator&lt;ftreap_node_t, N * 16&gt; allocator;
+  hash_ord_t hash_val;
+  hash_ord_t hash_sum;
+  ftreap_node_t *l = nullptr, *r = nullptr;
+  unsigned long weight = rand_eng();
+  size_t size = 1;
+
+  void push_up()
+  {
+    size = 0;
+    hash_sum = {0,0};
+    if (l != nullptr)
+    {
+      size += l-&gt;size;
+      hash_sum = hash_join(hash_sum, l-&gt;hash_sum);
+    }
+    size += 1;
+    hash_sum = hash_join(hash_sum, hash_val);
+    if (r != nullptr)
+    {
+      size += r-&gt;size;
+      hash_sum = hash_join(hash_sum, r-&gt;hash_sum);
+    }
+  }
+};
+std::mt19937_64 ftreap_node_t::rand_eng(18100820);
+pool_allocator&lt;ftreap_node_t, N * 16&gt; ftreap_node_t::allocator;
+extern ftreap_node_t *t[N];
+
+void ftreap_join(ftreap_node_t *&amp;u, ftreap_node_t *l, ftreap_node_t *r)
+{
+  if (l == nullptr) { u = r; return; }
+  if (r == nullptr) { u = l; return; }
+  if (l-&gt;weight &gt; r-&gt;weight)
+    ftreap_join((u = l)-&gt;r, l-&gt;r, r);
+  else
+    ftreap_join((u = r)-&gt;l, l, r-&gt;l);
+  u-&gt;push_up();
+}
+
+void ftreap_split(ftreap_node_t *&amp;l, ftreap_node_t *&amp;r,
+                  ftreap_node_t *u, hash_ord_t thr)
+{
+  if (u == nullptr)
+  {
+    l = r = nullptr;
+    return;
+  }
+  if (ftreap_node_t::ord_cmp(u-&gt;hash_val, thr))
+    ftreap_split((l = u)-&gt;r, r, u-&gt;r, thr);
+  else
+    ftreap_split(l, (r = u)-&gt;l, u-&gt;l, thr);
+  u-&gt;push_up();
+}
+
+// return key count (before)
+size_t ftreap_erase_once(ftreap_node_t *&amp;u, hash_ord_t val)
+{
+  // see(&quot;erase&quot;, &amp;u - t, val);
+  ftreap_node_t *a, *b, *c;
+  ftreap_split(a, b, u, val);
+  val.second--;
+  ftreap_split(b, c, b, val);
+  size_t res = b-&gt;size;
+  ftreap_join(b, b-&gt;l, b-&gt;r);
+  ftreap_join(a, a, b);
+  ftreap_join(u, a, c);
+  return res;
+}
+
+// return key count (after)
+size_t ftreap_insert(ftreap_node_t *&amp;u, hash_ord_t val)
+{
+  // see(&quot;insert&quot;, &amp;u - t, val);
+  ftreap_node_t *a, *b, *c, *d;
+  d = ftreap_node_t::allocator.allocate();
+  d-&gt;hash_val = d-&gt;hash_sum = val;
+  ftreap_split(a, b, u, val);
+  val.second--;
+  ftreap_split(b, c, b, val);
+  ftreap_join(b, b, d);
+  size_t res = b-&gt;size;
+  ftreap_join(a, a, b);
+  ftreap_join(u, a, c);
+  return res;
+}
+
+hash_ord_t ftreap_first(ftreap_node_t *u)
+{
+  while (u-&gt;l != nullptr)
+    u = u-&gt;l;
+  return u-&gt;hash_val;
+}
+
+// lct maintains the hash tuple of one&#39;s wson
+struct lct_node_t
+{
+  lct_node_t *f = nullptr, *s[2] = {nullptr, nullptr};
+  hash_ord_t val = {0,0}, join = {0,0};
+  Int ans = 1, ans_mul = 1;
+  bool is_root() { return f == nullptr || (f-&gt;s[0] != this &amp;&amp; f-&gt;s[1] != this); }
+  bool get_son() { return f-&gt;s[1] == this; }
+  void push_join(hash_ord_t det) { val = hash_join(det, val); join = hash_join(det, join); }
+  void push_mul(Int det_mul) { ans *= det_mul; ans_mul *= det_mul; }
+  void push_down() 
+  { 
+    if (s[0] != nullptr) { s[0]-&gt;push_join(join); s[0]-&gt;push_mul(ans_mul); }
+    if (s[1] != nullptr) { s[1]-&gt;push_join(join); s[1]-&gt;push_mul(ans_mul); }
+    join = {0,0}; ans_mul = 1;
+  }
+  void push()
+  {
+    if (!is_root()) f-&gt;push();
+    push_down();
+  }
+  void rotate()
+  {
+    lct_node_t *uu = this, *ff = f, *aa = ff-&gt;f;
+    bool ss = uu-&gt;get_son();
+    if (!ff-&gt;is_root()) aa-&gt;s[ff-&gt;get_son()] = uu;
+    ff-&gt;f = uu; ff-&gt;s[ss] = uu-&gt;s[!ss];
+    uu-&gt;f = aa; uu-&gt;s[!ss] = ff;
+    if (ff-&gt;s[ss] != nullptr) ff-&gt;s[ss]-&gt;f = ff;
+  }
+  void splay()
+  {
+    push();
+    while (!is_root())
+    {
+      if (f-&gt;is_root()) { rotate(); break; }
+      (is_root() == f-&gt;is_root() ? f : this)-&gt;rotate();
+      rotate();
+    }
+  }
+  void access()
+  {
+    lct_node_t *uu = this, *ss = nullptr;
+    while (uu != nullptr)
+    {
+      uu-&gt;splay(); uu-&gt;s[1] = ss;
+      ss = uu; uu = uu-&gt;f;
+    }
+  }
+};
+
+
+lct_node_t p[N];
+lct_node_t pp[N];
+ftreap_node_t *t[N];
+int fa[N], dep[N], ws[N];
+
+void lct_link(int u)
+{
+  // see(&quot;LCT: link&quot;, u);
+  p[u].access();
+  p[u].splay();
+  p[u].f = &amp;p[fa[u]];
+}
+
+void lct_cut(int u)
+{
+  // see(&quot;LCT: cut&quot;, u);
+  p[fa[u]].access();
+  p[u].splay();
+  p[u].f = nullptr;
+}
+
+void lct_reset(int u, hash_ord_t val)
+{
+  p[u].splay();
+  p[u].val = val;
+}
+
+hash_ord_t get_hash(int u)
+{
+  p[u].access();
+  p[u].splay();
+  hash_ord_t ws_hash = p[u].val;
+  hash_ord_t ot_hash = t[u]-&gt;hash_sum;
+  see(u, ws_hash, ot_hash);
+  return hash_join(ws_hash, ot_hash);
+}
+
+int get_top(int u)
+{
+  p[u].access();
+  p[u].splay();
+  lct_node_t *pos = &amp;p[u];
+  while (pos-&gt;s[0] != nullptr)
+    pos = pos-&gt;s[0];
+  pos-&gt;splay();
+  return static_cast&lt;int&gt;(pos - p);
+}
+
+size_t get_size(int u)
+{
+  p[u].splay();
+  return p[u].val.first + t[u]-&gt;hash_sum.first;
+}
+
+size_t get_smax_size(int u)
+{
+  if (t[u]-&gt;size == 1)
+    return 0;
+  return ftreap_first(t[u]).first;
+}
+
+void update_hash(int u, hash_ord_t u_ori, hash_ord_t u_cur)
+{
+  see(u, u_ori, u_cur);
+  if (u == 1) return;
+
+  const int f = fa[u];
+  const size_t u_size = get_size(u);
+
+  const hash_ord_t f_ori = get_hash(f);
+  if (ws[f] != 0)
+  {
+    size_t fs_size = get_size(ws[f]);
+    if (fs_size &lt;= u_size)
+    {
+      assert(fs_size == u_size);
+      ftreap_insert(t[f], get_hash(ws[f]));
+      lct_cut(ws[f]);
+      lct_reset(f, {0,0});
+      ws[f] = 0;
+    }
+  }
+  if (u_ori != (hash_ord_t){0,0})
+  {
+    const size_t ori_cnt = ftreap_erase_once(t[f], u_ori);
+    // see(&quot;mod_div&quot;, f, ori_cnt);
+    pp[f].access();
+    pp[f].splay();
+    pp[f].push_mul(inv[ori_cnt]);
+  }
+  if (ws[f] == 0 &amp;&amp; get_smax_size(f) &lt; u_size)
+  {
+    lct_link(u);
+    lct_reset(f, u_cur);
+    // see(f, u_cur);
+    ws[f] = u;
+  }
+  else
+  {
+    size_t cur_cnt = ftreap_insert(t[f], u_cur);
+    // see(&quot;mod_mul&quot;, f, cur_cnt);
+    pp[f].access();
+    pp[f].splay();
+    pp[f].push_mul(cur_cnt);
+  }
+  const hash_ord_t f_cur = get_hash(f);
+
+  int top = get_top(f);
+  hash_ord_t top_ori, top_cur;
+  if (top != f)
+  {
+    top_ori = get_hash(top);
+    const hash_ord_t det = hash_det(f_ori, f_cur);
+    see(det);
+    int ff = fa[f];
+    p[ff].access();
+    p[ff].splay();
+    p[ff].push_join(det);
+    top_cur = get_hash(top);
+  }
+  else
+  {
+    top_ori = f_ori;
+    top_cur = f_cur;
+  }
+  update_hash(top, top_ori, top_cur);
+}
+
+void preInit() 
+{ 
+  hash_cpow[0] = 1;
+  hash_cpow[1] = 82061943317773333ull;
+  for (int i = 2; i &lt; N; i++)
+    hash_cpow[i] = hash_cpow[i - 1] * hash_cpow[1];
+  inv[1] = 1;
+  for (int i = 2; i &lt; N; i++)
+    inv[i] = inv[MOD % i] * (MOD - MOD / i);
+} 
+
+int m;
+void init() 
+{ 
+  m = sc.n(); 
+  dep[1] = 1;
+  ftreap_insert(t[1], {1,1});
+}
+
+void solve() 
+{
+  int u = 2;
+  for (int i = 0; i &lt; m; i++)
+  {
+    int opt = sc.n();
+    if (opt == 0)
+    {
+      int f = sc.n(); 
+      see(&quot;add&quot;, f, u);
+      fa[u] = f;
+      pp[u].f = &amp;pp[f];
+      dep[u] = dep[f] + 1;
+      ftreap_insert(t[u], {1,dep[u]});
+      update_hash(u, {0,0}, {1,dep[u]});
+      u++;
+    }
+    else
+    {
+      int u = sc.n();
+      pp[u].splay();
+      std::cout &lt;&lt; pp[u].ans &lt;&lt; std::endl;
+    }
+  }
+}
+</code></pre>
+<!-- }}} -->
+</details>
+
+
 <h1 id="-ur-1-%E8%B7%B3%E8%9A%A4%E5%9B%BD%E7%8E%8B%E4%B8%8B%E6%B1%9F%E5%8D%97-https-uoj-ac-problem-23"><a href="https://uoj.ac/problem/23">UR#1 跳蚤国王下江南</a></h1>
 <p>久闻其名的毒瘤题，不过写完以后久的其实还好？</p>
 <h2 id="description">Description</h2>
