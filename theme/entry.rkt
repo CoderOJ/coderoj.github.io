@@ -16,9 +16,9 @@
        (cons title ($load-article (format "source/articles/~a/index.ss" title))))
      (cdr (assv 'articles conf))))
 
-  (make-directory* "public")
+  ($exec "rm -r public")
+  ($exec "cp -r theme/static public")
   (make-directory* "public/articles")
-  ($exec "cp -r theme/static/* public")
   ($write "public/index.html" ($html (@/home conf)))
   ($write "public/articles/index.html" ($html (@/articles conf arts)))
   (map
