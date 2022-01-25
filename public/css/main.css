@@ -1,0 +1,229 @@
+@import url("https://fonts.loli.net/css?family=Noto Serif SC");
+@import url("https://fonts.loli.net/css?family=Dancing Script");
+@import url("https://fonts.loli.net/css?family=ZCOOL XiaoWei");
+@import url("https://fonts.loli.net/css?family=Source Code Pro");
+
+body {
+  color: #3d3d3d;
+  background-color: #efefef;
+  font-family: "Noto Serif SC", serif;
+  padding: 0;
+  margin: 0;
+}
+
+.content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.friend-link {
+  text-decoration: unset;
+  border-bottom: 1px solid #999;
+  color: #4d4d4d;
+  transition-duration: 0.2s;
+}
+
+.friend-link:hover {
+  color: #1f1f1f;
+  transition-duration: 0.2s;
+}
+
+.sidebar {
+  background: white;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
+  opacity: 0.85;
+  margin: 5px;
+  width: 260px;
+  height: max-content;
+  flex: 0 0 260px;
+}
+
+.sidebar-title {
+  font-family: "Dancing Script";
+  text-align: center;
+  background-color: #222222;
+  color: eaefec;
+  display: block;
+  margin: 0;
+  padding-top: 10;
+  padding-bottom: 20;
+}
+
+.saying {
+  font-size: 12px;
+  margin: 0 30px;
+  color: #bbb;
+}
+
+.sidebar-body {
+  padding-bottom: 10px;
+}
+
+.sidebar-body HR {
+  width: 80%;
+  line-height: 1px;
+  color: #999;
+  opacity: 20%
+}
+
+.sidebar-menu {
+  margin: auto;
+  margin-bottom: 0;
+  padding-inline-start: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.list-item {
+  display:block;
+  text-align: left;
+  color: #5f5f5f;
+  padding-left: 20;
+  transition-delay: 0s;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+
+.list-item:hover {
+  color: #3f3f3f;
+  background-color: #e5e5e5;
+  padding-left: 30;
+  transition-delay: 0s;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+
+.sidebar-menu-item {
+  font-size: 17px;
+  line-height: 2em;
+}
+
+.sidebar-content {
+  font-size: 16px;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.avatar-rotate {
+  animation: rotate 10s linear 0s infinite;
+}
+
+.avatar {
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+  max-width: 120px;
+  animation: rotate 0.7s linear 0s infinite;
+  animation-play-state: paused;
+}
+
+.avatar:hover {
+  animation-play-state: running;
+}
+
+.sidebar-about {
+  text-align: center;
+  margin-top: 30;
+  margin-bottom: 30;
+}
+
+.sidebar-links {
+  padding-inline-start: 0;
+}
+
+.links-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.sidebar-links-item {
+  font-family: "ZCOOL XiaoWei";
+  margin: 10;
+  text-align: center;
+  font-size: 13px;
+  list-style: none;
+}
+
+.root {
+  background: white;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.12);
+  opacity: 0.85;
+  margin: 5px;
+  padding: 20px 40px;
+  height: max-content;
+  flex: 1 0 360px;
+  min-width: 360px;
+  font-size: 16px;
+}
+
+.art-list-container {
+  padding: 0px !important;
+}
+
+.art-list {
+  padding-left: 0px;
+}
+
+.art-list-item {
+  line-height: 3em;
+  padding-right: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.art-list-item-title {
+  font-family: 'ZCOOL XiaoWei';
+  font-size: 22px;
+}
+
+.art-list-item-tag {
+  font-size: 15px;
+  color: #999999;
+}
+
+article a {
+  border-bottom: 1px solid #099;
+  color: #099;
+  transition-duration: 0.2s;
+}
+
+article a:hover {
+  color: #0cc;
+  border-bottom: 2px solid #0cc;
+  transition-duration: 0.2s;
+}
+
+.hr-line {
+  height: 4px;
+  background-image: repeating-linear-gradient(-45deg, rgb(43, 47, 49), rgb(43, 47, 49) 4px, rgba(0, 0, 0, 0) 4px, rgba(0, 0, 0, 0) 8px);
+  border-style: none;
+  opacity: 0.4;
+}
+
+.gradual-button {
+  padding: 0.5em 1em;
+  text-align: center;
+  border-radius: 0px;
+  border-width: 0px;
+  background-color: #ddd;
+  transition-delay: 0s;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+
+.gradual-button:hover {
+  cursor: pointer;
+  background-color: #bbb;
+  transition-delay: 0s;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}

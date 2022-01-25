@@ -1,0 +1,74 @@
+<html><head><meta charset="UTF-8"></meta> <link rel="stylesheet" type="text/css" href="/css/main.css"></link> <link rel="icon" type="images/png" href="/images/favicon.png"></link> <script src="/js/element.js"></script> <title>支配树学习笔记 - Jacder's Blog</title> <link rel="stylesheet" type="text/css" href="/css/art.css"></link> <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css"></link> <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"></script> <script src="/js/language.min.js"></script> <script src="/js/crypto-js.min.js"></script></head> <body><div class="content"><div class="sidebar" id="sidebar"><div class="sidebar-title"><p style="font-weight: bold; font-size: 24px;">Jacder's Blog</p> <div class="saying" id="saying"></div></div> <div class="sidebar-body"><ul class="sidebar-menu"><a href="/"><li class="list-item sidebar-menu-item" style="">Home</li></a> <a href="/articles"><li class="list-item sidebar-menu-item" style="background: #e5e5e5">Articles</li></a></ul> <div class="sidebar-about"><div style="text-align: center; font-size: 16px;">About me</div> <hr align="center"></hr> <div class="avatar-rotate" style="margin: 2 auto; width: min-content"><img class="avatar" alt="Jacder" src="/images/avatar.png"></img></div> <ul class="sidebar-links"><li class="sidebar-links-item"><a class="friend-link" href="https://github.com/coderoj">Github</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://gitee.com/coderoj">Gitee</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://codeforces.com/profile/yz6205">CodeForces</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://luogu.com.cn/user/43368">Luogu</a></li> <li class="sidebar-links-item"><a class="friend-link" href="mailto:coderoj@outlook.com">Email</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://user.qzone.qq.com/2602904088">QQ</a></li></ul></div> <ul class="sidebar-links"><div style="text-align: center; font-size: 16px;">links</div> <hr align="center"></hr> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/Forever-666">Clovers</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://dpair.gitee.io">DPair</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/Flying2018">Flying2018</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.luogu.com.cn/blog/c2522943959/#">OIerwanhong</a></li> <li class="sidebar-links-item"><a class="friend-link" href="http://blog.leanote.com/rem_001">REM_001</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/huangchenyan">SevenDawns</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://xyf007.ml">xyf007</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://xyix.gitee.io">xYix</a></li></ul></div></div> <div class="root"><article><h2 id="%E5%AE%9A%E4%B9%89">定义</h2> <p>对于一个有向图 $G$ 和起点 $s$，定义 $u$ 支配 $v$ 当且仅当所有从 $s$ 到 $v$ 的路径都经过点 $u$。支配树即所有支配关系构成的树。</p> <p>不失一般性，在后文中都假设起点 $s$ 能到达图中的所有点。</p> <h2 id="dag-%E4%B8%8A%E7%9A%84%E5%81%9A%E6%B3%95">DAG 上的做法</h2> <p>考虑按照拓扑序构建支配树。一开始树中仅有 $s$ 结点。</p> <p>按照拓扑序，当处理点 $u$ 的时候，所有有边连向 $u$ 的点在支配树上的位置都已经确定。显然点 $u$ 在支配树上的父亲是那些点在支配树上的 $\operatorname{lca}$，直接倍增处理即可。</p> <h2 id="%E4%B8%80%E8%88%AC%E5%9B%BE%E4%B8%8A%E7%9A%84%E5%81%9A%E6%B3%95">一般图上的做法</h2> <p>没有特殊说明，后文中结点的大小关系均指 $\operatorname{dfn}$ 的大小关系，一个结点的父亲/祖先均指这个点在 dfs 树上的父亲/祖先。</p> <h3 id="%E5%AE%9A%E4%B9%89">定义</h3> <p>如果对与点 $u,v$ 满足存在路径 $u\to v_1 \to \cdots \to v_k \to v$ 且 $\forall i \in [1,k], u_i &gt; v$ ，那么我们称 $u$ 是 $v$ 的 <strong>半支配点</strong> 。</p> <p>显然一个点的半支配点有多个，定义 $u$ 的 <strong>最小半支配点</strong> 为 $\operatorname{semi}(u)$</p> <h3 id="%E6%80%A7%E8%B4%A8">性质</h3> <h4 id="1-operatorname-semi-u-%E4%B8%80%E5%AE%9A%E6%98%AF-u-%E7%9A%84%E7%A5%96%E5%85%88">1. $\operatorname{semi}(u)$ 一定是 $u$ 的祖先</h4> <p>证明：</p> <p>显然点 $u$ 的自己满足存在路径的条件，因此 $\operatorname{semi}(u) \leq u$</p> <p>那么考虑假设 $\operatorname{semi}(u)$ 不是 $u$ 的祖先。由于非树边一定从 $\operatorname{dfn}$ 大的连向 $\operatorname{dfn}$ 小的，所以 $(\operatorname{semi}(u),v_1)$ 这条边只能是树边。 如果 $(\operatorname{semi}(u),v_1)$ 是树边，那么根据 $\operatorname{semi}(u) &lt; u &lt; v$，可以推出 $u$ 在 $\operatorname{semi}(u)$ 的子树中，矛盾。</p> <h4 id="2-%E5%88%A0%E9%99%A4%E5%8E%9F%E5%9B%BE%E9%9D%9E%E6%A0%91%E8%BE%B9%EF%BC%8C%E5%8A%A0%E5%85%A5%E5%BD%A2%E5%A6%82-operatorname-semi-u-u-%E7%9A%84%E8%BE%B9%EF%BC%8C%E6%94%AF%E9%85%8D%E5%85%B3%E7%B3%BB%E4%B8%8D%E5%8F%98">2. 删除原图非树边，加入形如 $(\operatorname{semi}(u), u)$ 的边，支配关系不变</h4> <p>证明：</p> <p>形如 $(\operatorname{semi}(u), v)$ 的边在原图中对应一条路径，所以新图中不会引入新的路径，因此原图中的支配关系在新图中必然存在。</p> <p>然后我们只需要证明对于新图中的支配关系 $(x,u)$ 一定在原图中存在。</p> <p>新图中支配关系 $(x,u)$ 存在，当且仅当 $x$ 到 $u$ 路径上的任意点 $y$ 满足 $\operatorname{semi}(y) \geq x$。</p> <p>而如果在原图中支配关系 $(x,u)$ 不存在，即在原图中存在一条不经过 $x$ 的路径 $s \to \cdots \to a \to b \to \cdots \to u(a &lt; x &lt; b)$，那么考虑 $b\to \cdots \to u$ 与 $x\to \cdots \to u$ 的第一个交点 $c$ （$c$ 可能等于 $u$）， 应有 $\operatorname{semi}(c) \leq a$， 矛盾，所以新图中的支配关系都在原图中存在。</p> <h3 id="%E5%81%9A%E6%B3%95">做法</h3> <p>先求出所有点的最小半支配点，然后删除非树边，加入形如 $(\operatorname{sami}(u), u)$ 的边，此时我们得到了一个与原图支配等价的 DAG，直接套用 DAG 上的做法即可（有更优秀的做法但我不会）。</p> <p>接下来问题转化为如何求出所有的最小半支配点</p> <p>考虑一条边 $u \to v$，根据大小关系分类讨论</p> <ul><li>$u &lt; v$，那么 $u$ 是 $v$ 的半支配点</li> <li>$u &gt; v$，那么对于满足 $p &gt; v$ 的 $u$ 的祖先 $p$，$p$ 的半支配点都是 $u$ 的半支配点</li></ul> <p>显然这覆盖到了所有半支配点的情况。</p> <p>然后做法就比较显然了。按照 $\operatorname{dfn}$ 倒序枚举每一个点 $u$，考虑所有 $x\to u$ 的边，如果 $x &lt; u$  就用 $x$ 更新 $\operatorname{semi}(u)$，不然就用 $x$ 的所有满足 $p &gt; u$ 的祖先 $p$ 的 $\operatorname{semi}(p)$ 更新 $\operatorname{semi}(u)$，用带权并查集优化即可。</p> <h2 id="%E5%AE%9E%E7%8E%B0">实现</h2> <pre><code class="lang-cpp">#include "https://gitee.com/coderoj/code/raw/master/creats/pipe.h"
+constexpr int N = 300005;
+constexpr int B = 20;
+Vector&lt;int&gt; e[N], eb[N], ed[N], due[N];
+int n, m;
+int dfn[N], fa[N], semi[N], f[N][B], d[N], size[N], dfncnt=0;
+void dfs(int u) {
+ dfn[u] = dfncnt++;
+ for (int v: e[u]) if (dfn[v] == -1) {
+   fa[v] = u; dfs(v); } }
+bool dfn_cmp(int u, int v) { return dfn[u] &lt; dfn[v]; }
+struct Dsu {
+ int p[N], semi[N];
+ Dsu() { 
+   range(N)
+   | ranges::foreach([&amp;](int i) { p[i] = semi[i] = i; }); }
+ int get(int u) { 
+   if (u == p[u]) { return p[u]; }
+   int pa = get(p[u]);
+   semi[u] = std::min(semi[u], semi[p[u]], dfn_cmp); 
+   return p[u] = pa; }
+ void merge(int u, int v) { 
+   u=get(u); v=get(v); p[v] = u; } 
+} st;
+int lca(int u, int v) {
+ if (d[u] &lt; d[v]) { std::swap(u,v); }
+ int delta = d[u] - d[v]; for (int i=0;i&lt;B;++i) if (delta &amp; (1&lt;&lt;i)) { u=f[u][i]; }
+ for (int i=B-1; i&gt;=0; --i) if (f[u][i] != f[v][i]) { u=f[u][i]; v=f[v][i]; }
+ return u==v ? u : f[u][0]; }
+void init_f(int u, int ufa) {
+ f[u][0] = ufa; d[u] = d[ufa] + 1;
+ for (int i: range(B-1)) { f[u][i+1] = f[f[u][i]][i]; } }
+void dfs1(int u) {
+ size[u] = 1;
+ for (int v: ed[u]) { 
+   dfs1(v); size[u] += size[v]; } }
+void preInit() { } void init() {
+ n = sc.n(); m = sc.n();
+ range(m)
+ | ranges::foreach([](int){
+   int u = sc.n(), v = sc.n();
+   e[u].push_back(v); eb[v].push_back(u); });
+} void solve() {
+ memset(dfn, -1, sizeof(dfn)); dfs(1);
+ for (int i: range(1, n+1)) { semi[i] = i; }
+ Vector dfn_id = 
+ Vector&lt;int&gt;(range(2,n+1)) 
+ | ranges::sortby(dfn_cmp)
+ | ranges::reverse;
+ dfn_id
+ | ranges::foreach([](int u) {
+   eb[u] 
+   | ranges::foreach([=](int x) {
+     st.get(x); 
+     semi[u] = std::min(semi[u], st.semi[x], dfn_cmp); 
+     st.semi[u] = semi[u]; });
+   due[dfn[u]] 
+   | ranges::foreach([=](int x) { 
+     st.merge(fa[x], x); });
+   if (u != 1) { due[dfn[fa[u]]].push_back(u); } });
+ std::move(dfn_id)
+ | ranges::reverse
+ | ranges::foreach([](int u) {
+   int f = lca(fa[u], semi[u]);
+   ed[f].push_back(u); init_f(u,f); });
+ dfs1(1);
+ std::cout &lt;&lt; (
+   Vector&lt;int&gt;(range(1,n+1)) 
+   | ranges::transform([](int u) { return size[u]; })
+ ) &lt;&lt; std::endl;
+}
+</code></pre> <br></article> <br> <hr class="hr-line"></hr> <div style="font-size: 12px; display: flex;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></img></a> <div style="margin-left: 10px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License.</a></div></div> <script>hljs.configure({ tabReplace: '  ' }); 
+      hljs.highlightAll(); 
+      loadMath();</script></div></div></body></html>

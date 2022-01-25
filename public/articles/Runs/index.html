@@ -1,0 +1,142 @@
+<html><head><meta charset="UTF-8"></meta> <link rel="stylesheet" type="text/css" href="/css/main.css"></link> <link rel="icon" type="images/png" href="/images/favicon.png"></link> <script src="/js/element.js"></script> <title>Runs 学习笔记 - Jacder's Blog</title> <link rel="stylesheet" type="text/css" href="/css/art.css"></link> <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css"></link> <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"></script> <script src="/js/language.min.js"></script> <script src="/js/crypto-js.min.js"></script></head> <body><div class="content"><div class="sidebar" id="sidebar"><div class="sidebar-title"><p style="font-weight: bold; font-size: 24px;">Jacder's Blog</p> <div class="saying" id="saying"></div></div> <div class="sidebar-body"><ul class="sidebar-menu"><a href="/"><li class="list-item sidebar-menu-item" style="">Home</li></a> <a href="/articles"><li class="list-item sidebar-menu-item" style="background: #e5e5e5">Articles</li></a></ul> <div class="sidebar-about"><div style="text-align: center; font-size: 16px;">About me</div> <hr align="center"></hr> <div class="avatar-rotate" style="margin: 2 auto; width: min-content"><img class="avatar" alt="Jacder" src="/images/avatar.png"></img></div> <ul class="sidebar-links"><li class="sidebar-links-item"><a class="friend-link" href="https://github.com/coderoj">Github</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://gitee.com/coderoj">Gitee</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://codeforces.com/profile/yz6205">CodeForces</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://luogu.com.cn/user/43368">Luogu</a></li> <li class="sidebar-links-item"><a class="friend-link" href="mailto:coderoj@outlook.com">Email</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://user.qzone.qq.com/2602904088">QQ</a></li></ul></div> <ul class="sidebar-links"><div style="text-align: center; font-size: 16px;">links</div> <hr align="center"></hr> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/Forever-666">Clovers</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://dpair.gitee.io">DPair</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/Flying2018">Flying2018</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.luogu.com.cn/blog/c2522943959/#">OIerwanhong</a></li> <li class="sidebar-links-item"><a class="friend-link" href="http://blog.leanote.com/rem_001">REM_001</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/huangchenyan">SevenDawns</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://xyf007.ml">xyf007</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://xyix.gitee.io">xYix</a></li></ul></div></div> <div class="root"><article><p>这个字符串菜鸡来填坑了。</p> <p>照着孔姥爷的博客学的所以这篇博客会和孔姥爷的那篇很像 <del>一模一样</del></p> <p>可能有一些 MathJax 炸了但应该问题不大。</p> <h2 id="%E4%B8%80%E4%BA%9B%E8%AE%B0%E5%8F%B7%E5%92%8C%E7%BA%A6%E5%AE%9A">一些记号和约定</h2> <ul><li>文章中的字符串下标从 $1$ 开始（代码中一般 index-0），$s_i,s[i]$ 表示字符串 $s$ 的第 $i$ 个字符，$|s|$ 表示 $s$ 的长度</li> <li>$ &gt; $ 和 $ &lt; $ 表示字典序的比较，空串的字典序最小</li> <li>$\Sigma$ 表示字符集大小，$\Sigma^*$ 表示字符集为 $\Sigma$ 的字符串，$\Sigma^+ = \Sigma^* \setminus {\epsilon}$，即非空串集合。</li> <li>$\epsilon$ 表示空串，$\$$ 表示特殊字符，且 $\forall c \in \Sigma, \$ &gt; c$</li> <li>$\overline \Sigma = \Sigma \cup {$}$， $\overline{\Sigma^*}$ 表示字符集为 $\overline \Sigma$ 的字符串</li> <li>默认普通字符串中不包含特殊字符 $\$$</li> <li>$st, s+t$ 均表示字符串拼接</li> <li>$s^k$ 表示 $s$ 重复 $k$ 次得到的字符串，$s^\infty$ 表示 $s$ 重复无限次得到的字符串</li> <li>$s^R$ 表示 $s$ 翻转过后的字符串</li> <li>$s[i:j]$ 表示 $s$ 的第 $i$ 位到第 $j$ 位构成的子串，若 $i &gt; j$ 则为 $\epsilon$，$s[:i] = s[1:i], s[i:] = s[i:|s|]$</li> <li>$s \prec t \Leftrightarrow s + \$ &lt; v, s \succ t \Leftrightarrow s &gt; t + \$$</li> <li>$\operatorname{lcp}(s,t)$ 表示 $s$ 和 $t$ 的最长公共前缀</li> <li>$\operatorname{period}$：整数 $l$ 是 $s$ 的一个 $\operatorname{period}$ 当且仅当 $\forall i \in [1, |s| - l], s_i = s_{i+l}$</li> <li>$\operatorname{border}$：整数 $l$ 是 $s$ 的 $\operatorname{border}$ 当且仅当 $\forall i \in [1,l], s_i = s_{n - l + i}$ + 整循环串：$s$ 是一个整循环串当且仅当 $\exists t \in \Sigma^*, s = t^k (k \geq 2)$</li> <li>循环串：$s$ 是一个循环串当且仅当 $\exists t \in \Sigma^*, s = t^k + t[:p]$， 其中 $k$ 是任意整数，$p&lt;|t|$</li> <li>最短循环节：长度最小的 $t$ 满足 $s = t^k (k \geq 2)$</li></ul> <h2 id="%E4%B8%80%E4%BA%9B%E5%89%8D%E7%BD%AE%E7%BB%93%E8%AE%BA">一些前置结论</h2> <ol><li>若 $u \prec v$，则 $\forall w_1, w_2 \in \Sigma^*, u + w_1 \prec v + w_2$，$\succ$ 同理。</li></ol> <h2 id="lyndon-word">Lyndon Word</h2> <p>定义 $s$ 是一个 Lyndon Word 当且仅当 $s$ 比它所有的后缀都要小，即 $\forall i \in [2,|s|], s &lt; s[i:]$。</p> <p>比如 $\texttt{ababb}$ 是一个 Lyndon Word 而 $\texttt{abab}$ 不是。</p> <h3 id="lyndon-%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%A7%E8%B4%A8">Lyndon 的一些性质</h3> <ul><li>若 $s$ 是一个 Lyndon Word，则 $\forall i \in [1, |s|-1], s[:i] \prec s[n-i+1:]$</li> <li>若 $u$ 和 $v$ 都是 Lyndon Word 且 $u &lt; v$，则 $uv$ 也是 Lyndon Word</li></ul> <p><del>证明显然。</del></p> <h3 id="lyndon-%E5%88%86%E8%A7%A3">Lyndon 分解</h3> <p>定义：把一个字符串分为若干 Lyndon Word，并且字典序单调不增。</p> <p>形式化地说，对于一个字符串 $s$，若 $t_1 + t_2 + \cdots + t_n = s, \forall i \in [1,n], t_i \text{ is a Lyndon Word}$ 且 $\forall i&gt;j, t_i \geq t_j$，那我们称 $t_1 \cdots t_n$ 为 $s$ 的一个 Lyndon 分解。</p> <p>通常采用 Duval 算法求 Lyndon 分解。</p> <h4 id="duval-%E7%AE%97%E6%B3%95">Duval 算法</h4> <p>考虑依次插入字符，维护当前的 Lyndon 分解。</p> <p>我们假设分解形式为 $T + t^k + t[:p]$，其中 $T = t_1t_2\cdots t_m$ 且满足 $t_1 \geq t_2 \geq \cdots \geq t_m &gt; t$</p> <p>设当前加入的字符为 $c$，$u = t[p + 1]$，分类讨论：</p> <ul><li>$c = u$，则转移到分解 $T + t^k + t[:p+1]$</li> <li>$c &lt; u$，则 $T \gets T + t + \cdots + t\text{(for m times)}$，并转移到分解 $T + (t + c)$</li> <li>$c &gt; u$，则 $t^k + t[:p] + c$ 是一个 Lyndon Word，则转移到 $T + (t^kt[:p]c)^1 + \epsilon$</li></ul> <p>具体地，我们考虑维护一个三元组 $(i,j,k)$ 其中 $i$ 是 $t+t[:p]$ 的首字母位置，$[j,k)$ 是最后一个循环节。</p> <p>那么就可以如下转移：</p> <ul><li>$c = u: (i,j,k) \gets (i, j+1, k+1)$</li> <li>$c &lt; u: (i,j,k) \gets (k, k, k+1)$</li> <li>$c &gt; u: (i,j,k) \gets (i, i, k+1)$</li></ul> <p>代码如下:</p> <pre><code class="lang-c">struct duval_triple
+{
+ int index;
+ int loop_l, loop_r;
+};
+static int *duval(int *dest, const char *src)
+{
+ struct duval_triple pos = { 0, 0, 1 };
+ while (src[pos.index])
+ {
+   pos.loop_l = pos.index;
+   pos.loop_r = pos.index + 1;
+   while (src[pos.loop_r] &amp;&amp; 
+          src[pos.loop_l] &lt;= src[pos.loop_r])
+   {
+     if (src[pos.loop_l] &lt; src[pos.loop_r])
+       pos.loop_l = pos.index;
+     else pos.loop_l++;
+     pos.loop_r++;
+   }
+   int len = pos.loop_r - pos.loop_l;
+   while (pos.index &lt;= pos.loop_l)
+   {
+     pos.index += len;
+     *dest++ = pos.index;
+   }
+ }
+ return dest;
+}
+</code></pre> <h3 id="lyndon-%E6%95%B0%E7%BB%84">Lyndon 数组</h3> <p>定义：对于一个字符串 $s$，定义 $\lambda_i$ 表示从 $i$ 开始的最长 Lyndon Word 的终止位置，
+即 $s[i:\lambda_i]$ 是一个 Lyndon 且 $\forall j &gt; \lambda_i s[i:j]$ 不是 Lyndon Word。</p> <p>性质：若 $u$ 是一个 Lyndon Word，$s$ 的 Lyndon 分解是 $t_1t_2\cdots t_n$，那么 $u &lt; t_1 \Leftrightarrow u+s &lt; s$</p> <p>证明：</p> <ul><li>$u &lt; t_1 \Rightarrow u+s &lt; s$ <br> 若 $u \prec t_1$，那么根据前置结论 1，有 $u+s &lt; t_1 + (t_2\cdots t_n)$ <br> 否则有 $|u| &lt; |t_1|$，设 $l=|t_1|-|u|$，那么由于 $t_1$ 是 Lyndon，$t_1[:l] &lt; t_1[|t_1|-l+1:]$</li> <li>$u+s &lt; s \Rightarrow u &lt; t_1$ <br> 考虑使用反证法，即证明 $u\geq t_1 \Rightarrow u+s\geq s$ <br> 同理若 $u \succ t_1$，则 $u+s &gt; t_1 + (t_2\cdots t_n)$ <br> 否则 $|u| \geq |t_1|, u[:|t_1|] = t_1$，设 $l=|u|-|t_1|$，则由 Lyndon 的性质可得 $u[|u|-l+1:] \succ u \geq t_1 \geq t_2$，所以 $u[:l] + u[|u|-l+1:] \succ t_1 + t_2$，即 $u+s\geq s$</li></ul> <p>算法实现：</p> <p>从后往前加字符，考虑维护一个单调栈 $t$ 表示当前后缀的 Lyndon 分解（$t_0$ 是栈顶），满足 $t_i \geq t_{i+1}$</p> <p>假设我们当前加入的字符为 $c$。设 $s=c$，每次判断是否有 $s &lt; t_0$，如果是就 $s \gets s+t_0$  并弹出栈顶。重复上述步骤直到满足单调性，再将 $s$ 插入栈中。此时 $\lambda_i$ 就是 $s$ 的右端点。</p> <p>复杂度瓶颈在于求 $\operatorname{lcp}$，总复杂度 $O(n \log n)$ 或 $O(n)$。</p> <h2 id="runs">Runs</h2> <h3 id="%E5%AE%9A%E4%B9%89">定义</h3> <p>定义三元组 $(i,j,p)$ 是 $s$ 的一个 run，当且仅当 $s[j+1] \neq s[j-p+1], s[i] \neq s[i+p-1]$ 且 $s[i:i+p-1]$ 是 $s[i:j]$ 长度最小的出现至少两次的循环节（不一定为整循环节）。</p> <p>人话就是循环次数至少为 2 的循环串，并且不能往左右延伸。</p> <p>比如在 $\texttt{ababababba}$ 这个串中：</p> <ul><li>$(1, 8, 2)$ 是一个 run</li> <li>$(3, 8, 2)$ 不是，因为可以继续向左延伸</li> <li>$(1, 8, 4)$ 不是，因为 $\texttt{abab}$ 不是 $\texttt{abababab}$ 的最小 period</li> <li>$(6, 10, 3)$ 不是，因为 $\texttt{abb}$ 没有出现最少 2 次。</li></ul> <p>Runs: 定义 $\operatorname{Runs}(s)$ 为所有 $s$ 的 run 的集合。</p> <p>指数：定义一个 run $(l,r,p)$ 的指数为 $\frac{r-l+1}{p}$，即 period $p$ 在 $[l:r]$ 中出现的次数，记为 $e(l,r,p)$</p> <p>偏序关系：定义两种偏序关系 $&lt;_0, &lt;_1$，其中 $&lt;_0$ 一般表示字典序较小， $&lt;_1$ 一般表示字典序较大。 <br> $\ell \in \{0,1\}$ 表示一种偏序关系，$\overline \ell$ 表示与 $\ell$ 相反的偏序关系，$&lt; _\ell$ 表示 $\ell$ 对应的偏序关系。 <br> 在 $&lt;_\ell$ 上定义的 Lyndon Word 意为将比较定义为 $&lt;_\ell$ 定义下的 Lyndon Word。</p> <p>Lyndon Root：定义 $s[\lambda_l:\lambda_r]$ 是 $(i,j,p)$ 在 $ &lt;_\ell $ 上的 Lyndon Root，
+当且仅当 $[\lambda_l, \lambda_r] \in [i,j]$ 且 $s[\lambda_l, \lambda_r]$ 是一个定义在 $&lt;_\ell$ 上的 Lyindon Word。</p> <p>run 的类型：run $(i,j,p)$ 是 $\ell(\ell \in {0,1})$ 型的，当且仅当 $s[j-p+1] &lt;_\ell s[j+1]$。</p> <p>$l_\ell(p)$：$l_\ell(p)$ 表示以位置 $p$ 开头的最长定义在 $\ell$ 上的 Lyndon Word （就是 Lyndon 数组）</p> <h3 id="%E6%8E%A8%E8%AE%BA">推论</h3> <ul><li>对于 $\ell$ 型 run，其所有定义在 $&lt;_\ell$ 上的 Lyndon Root $\lambda = [\lambda_l, \lambda_r]$ 都有 $\lambda = l_\ell(\lambda_l)$，
+即所有 Lyndon Root 都是同起点中的最长的 Lyndon Word。</li></ul> <p>不难发现对于$\ell$ 型 run $(i,j,p)$，$\forall p \in [i,j], |l_\ell(p)| \leq j - p + 1$，也就是不存在跨于这个 run 的 Lyndon Word。</p> <ul><li>对于任意 run $r(i,j,p)$，其所有 Lyndon Root 左端点不重复。</li></ul> <p>证明比较显然，考虑每一个开始位置，显然 Lyndon Root 的长度小于等于 $p$，根据 Duval 算法的过不难发现小于等于循环节的 Lyndon Word 仅有一个。</p> <h3 id="runs-%E7%9A%84%E6%B1%82%E8%A7%A3">Runs 的求解</h3> <p>对于两种 run 分别求解再去重。</p> <p>先求出所有的 $l_\ell$，即求出 Lyndon 数组。</p> <p>我们令 $p_i = s[_\ell(i) : l_\ell(i)]$，观察其往左往右能延伸到最远的地方 $s[l_i':r_i']$。对于三元组 $(l_i', r_i', |p_i|)$，我们只需要判断是否满足 $|p_i| \geq \frac{r_i'-l_i'+1}{2}$ 即可。</p> <p>不难证明这样一定能找到所有的 run，至此完成了 Runs 的求解。</p> <h3 id="%E4%BB%A3%E7%A0%81">代码</h3> <pre><code class="lang-cpp">#include &lt;bits/stdc++.h&gt;
+constexpr int N = 1000005;
+constexpr int B = 2333;
+char str[N];
+uint64_t s[N];
+int n;
+uint64_t h[N], bs[N];
+uint64_t get(int l, int r)
+{
+ return h[r] - h[l - 1] * bs[r - l + 1];
+}
+int lcp(int x, int y)
+{
+ int l = 1, r = n - std::max(x, y) + 1, res = 0;
+ while (l &lt;= r)
+ {
+   int mid = (l + r) &gt;&gt; 1;
+   if (get(x, x + mid - 1) == get(y, y + mid - 1))
+     l = mid + 1, res = mid;
+   else
+     r = mid - 1;
+ }
+ return res;
+}
+int lcs(int x, int y)
+{
+ int l = 1, r = std::min(x, y), res = 0;
+ while (l &lt;= r)
+ {
+   int mid = (l + r) &gt;&gt; 1;
+   if (get(x - mid + 1, x) == get(y - mid + 1, y))
+     l = mid + 1, res = mid;
+   else
+     r = mid - 1;
+ }
+ return res;
+}
+bool cmp(int l1, int r1, int l2, int r2)
+{ // s[l1:r1]&lt;s[l2:r2]
+ int l = lcp(l1, l2);
+ if (l &gt; std::min(r1 - l1, r2 - l2))
+   return r1 - l1 &lt; r2 - l2;
+ return s[l1 + l] &lt; s[l2 + l];
+}
+struct runs
+{
+ int i, j, p;
+ runs(int i = 0, int j = 0, int p = 0) : i(i), j(j), p(p)
+ {
+ }
+ bool operator==(const runs a) const
+ {
+   return i == a.i &amp;&amp; j == a.j &amp;&amp; p == a.p;
+ }
+ bool operator&lt;(const runs a) const
+ {
+   return i == a.i ? j &lt; a.j : i &lt; a.i;
+ }
+};
+std::vector&lt;runs&gt; ans;
+int st[N], t, run[N];
+void lyndon()
+{
+ t = 0;
+ for (int i = n; i; i--)
+ {
+   st[++t] = i;
+   for (; t &gt; 1 &amp;&amp; cmp(i, st[t], st[t] + 1, st[t - 1]); t--)
+     ;
+   run[i] = st[t];
+ }
+}
+void init()
+{
+ bs[0] = 1;
+ for (int i = 1; i &lt;= n; i++)
+   h[i] = h[i - 1] * B + s[i], bs[i] = bs[i - 1] * B;
+}
+void get_runs()
+{
+ for (int i = 1; i &lt;= n; i++)
+ {
+   int l1 = i, r1 = run[i], l2 = l1 - lcs(l1 - 1, r1), r2 = r1 + lcp(l1, r1 + 1);
+   if (r2 - l2 + 1 &gt;= (r1 - l1 + 1) * 2)
+     ans.push_back(runs(l2, r2, r1 - l1 + 1));
+ }
+}
+int main()
+{
+ scanf("%s", str + 1);
+ n = (int)std::strlen(str + 1);
+ for (int i = 1; i &lt;= n; i++)
+   s[i] = (uint64_t)(str[i] - 'a' + 1);
+ init();
+ lyndon();
+ get_runs();
+ for (int i = 1; i &lt;= n; i++)
+   s[i] = 27 - s[i];
+ lyndon();
+ get_runs();
+ sort(ans.begin(), ans.end());
+ ans.erase(unique(ans.begin(), ans.end()), ans.end());
+ printf("%d\n", (int)ans.size());
+ for (auto u : ans)
+   printf("%d %d %d\n", u.i, u.j, u.p);
+ return 0;
+}
+</code></pre> <br></article> <br> <hr class="hr-line"></hr> <div style="font-size: 12px; display: flex;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></img></a> <div style="margin-left: 10px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License.</a></div></div> <script>hljs.configure({ tabReplace: '  ' }); 
+      hljs.highlightAll(); 
+      loadMath();</script></div></div></body></html>

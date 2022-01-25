@@ -1,0 +1,113 @@
+<html><head><meta charset="UTF-8"></meta> <link rel="stylesheet" type="text/css" href="/css/main.css"></link> <link rel="icon" type="images/png" href="/images/favicon.png"></link> <script src="/js/element.js"></script> <title>Codeforces 601D - Jacder's Blog</title> <link rel="stylesheet" type="text/css" href="/css/art.css"></link> <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css"></link> <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js"></script> <script src="/js/language.min.js"></script> <script src="/js/crypto-js.min.js"></script></head> <body><div class="content"><div class="sidebar" id="sidebar"><div class="sidebar-title"><p style="font-weight: bold; font-size: 24px;">Jacder's Blog</p> <div class="saying" id="saying"></div></div> <div class="sidebar-body"><ul class="sidebar-menu"><a href="/"><li class="list-item sidebar-menu-item" style="">Home</li></a> <a href="/articles"><li class="list-item sidebar-menu-item" style="background: #e5e5e5">Articles</li></a></ul> <div class="sidebar-about"><div style="text-align: center; font-size: 16px;">About me</div> <hr align="center"></hr> <div class="avatar-rotate" style="margin: 2 auto; width: min-content"><img class="avatar" alt="Jacder" src="/images/avatar.png"></img></div> <ul class="sidebar-links"><li class="sidebar-links-item"><a class="friend-link" href="https://github.com/coderoj">Github</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://gitee.com/coderoj">Gitee</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://codeforces.com/profile/yz6205">CodeForces</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://luogu.com.cn/user/43368">Luogu</a></li> <li class="sidebar-links-item"><a class="friend-link" href="mailto:coderoj@outlook.com">Email</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://user.qzone.qq.com/2602904088">QQ</a></li></ul></div> <ul class="sidebar-links"><div style="text-align: center; font-size: 16px;">links</div> <hr align="center"></hr> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/Forever-666">Clovers</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://dpair.gitee.io">DPair</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/Flying2018">Flying2018</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.luogu.com.cn/blog/c2522943959/#">OIerwanhong</a></li> <li class="sidebar-links-item"><a class="friend-link" href="http://blog.leanote.com/rem_001">REM_001</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://www.cnblogs.com/huangchenyan">SevenDawns</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://xyf007.ml">xyf007</a></li> <li class="sidebar-links-item"><a class="friend-link" href="https://xyix.gitee.io">xYix</a></li></ul></div></div> <div class="root"><article><h2 id="description">Description</h2> <ul><li>给定一颗有根树，每个点上有一个字符。</li> <li>对于一个节点 $u$ 的子树，从 $u$ 到子树中某一个节点的路径上的字符可以组成一个字符串（可能只有一个字符），定义所有不同的字符串的个数为 $\operatorname{dif}(u)$ 。</li> <li>对于每个点$u$，求$\operatorname{dif}(u)$。</li></ul> <h2 id="tutorial">Tutorial</h2> <p>怎么大家都写的是Trie树合并啊。</p> <p>我写的是哈希， <del>喜提最慢解和最长代码（</del></p> <p>对于每一个节点我们求出它到子树中所有点的字符串哈希值的集合，每个点的答案就是集合的大小。~~</p> <p>对于一个字符串的哈希值，我们可以很方便的得到在这个字符串前面加一个字符后的哈希值，并且不依赖与这个字符串的长度。</p> <p>现在的问题在于如何合并子树信息，还有如何全局在头上加字符。</p> <h3 id="%E5%90%88%E5%B9%B6%E5%AD%90%E6%A0%91%E4%BF%A1%E6%81%AF">合并子树信息</h3> <p>dsu on tree 的板子。具体的，我们首先预处理出每个点的重儿子，然后在第二遍 dfs 统计答案的时候，对于正在处理的点 u，我们发现他的儿子的信息在以后不会使用到，就可以直接把他的信息赋成它重儿子的信息，然后暴力把轻儿子的信息合并上去。</p> <blockquote><p><del>无论你是推式子的 log n − log s​ 选手， 还是运算次数每加一规模减半的毛估估大师，都可以轻松得到正确的复杂度。</del></p></blockquote> <p>关于细节，如果合并的时候不想写指针或者数组模拟什么的，可以考虑用 c++11 里的 <code>std::move</code> ，以 <code>std::set</code> 举例， <code>setA = std::move(setB)</code> 的时间复杂的是 $\mathcal O(1)$ 的，代价是以后不能（不建议）访问 <code>setB</code> ，在本题中显然没有问题。</p> <h3 id="%E5%85%A8%E5%B1%80%E5%9C%A8%E5%BC%80%E5%A4%B4%E5%8A%A0%E5%AD%97%E7%AC%A6">全局在开头加字符</h3> <p>这也是一种套路。对于每个 <code>set</code>  额外再维护两个全局偏移量  <code>mul</code> 和 <code>add</code> ，表示这个对于这个 <code>set</code> 中的元素 <code>u</code> ，其真实值为 <code>u * mul + add</code> 。</p> <p>插入 <code>v</code> 的时候，我们在模意义下求出 <code>(v - add) / mul</code> 然后再把它丢到 <code>set</code> 里去。</p> <p>全局加的时候修改 <code>add</code> ，全局乘的时候要把 <code>mul</code> 和 <code>add</code> 都更新。</p> <p>然后就做完了。</p> <h2 id="code">Code</h2> <p><a href="https://gitee.com/coderoj/cts/blob/master/tmp/CF601D/main.cpp">完整代码</a></p> <p>由于我代码里的模板什么实在是太长了，这里放一个便于理解的版本</p> <p><del>写个题都有虚基类多继承和运行时多态这种事情应该只有我干的出来吧</del></p> <pre><code class="lang-cpp">#define rep(i,n) for (int i=0;i&lt;n;i++)
+#define repa(i,n) for (int i=1;i&lt;=n;i++)
+// Intm 是模意义下的整数
+class Intm {
+   static const unsigned long long MOD;
+   //...
+};
+const unsigned long long Intm::MOD = 999999137;
+struct HashSet {
+   struct Int : public Intm {
+       Int () : Intm(0) {}
+       Int (unsigned long long _a) : Intm(_a) {} 
+       // 因为要丢进set所以还需要比较函数
+       bool operator &lt; (const Int&amp; B) const { return a &lt; B.a; } 
+   };
+   // 哈希种子（这道题要双模所以很慢）
+   static const Int SEED1, SEED2;
+   set &lt;pair&lt;Int,Int&gt;&gt; st;
+   Int mul1, add1;
+   Int mul2, add2;
+   HashSet () { mul1=mul2=1; add1=add2=0; }
+   // 从重儿子哪里继承过来
+   void inherit(HashSet &amp;B) {
+       // 移动赋值语义，以后不对B进行访问
+       st = std::move( B.st );
+       mul1 = B.mul1; add1 = B.add1; 
+       mul2 = B.mul2; add2 = B.add2; 
+   }
+   // 在头上加入一个字符
+   inline void push(Int del) {
+       mul1 *= SEED1; add1 *= SEED1; add1 += del; 
+       mul2 *= SEED2; add2 *= SEED2; add2 += del; 
+   }
+   // 插入哈希值
+   inline void insert(pair&lt;Int,Int&gt; u) {
+       u.L -= add1; u.L /= mul1;
+       u.R -= add2; u.R /= mul2;
+       st.insert(u); 
+   }
+   // 暴力合并
+   inline void merge(HashSet &amp;B) {
+       for (auto u: B.st) {
+           u.L *= B.mul1; u.L += B.add1;
+           u.R *= B.mul2; u.R += B.add2;
+           insert(u); 
+       } 
+   }
+   inline int size() {
+       return st.size(); 
+   }
+};
+const HashSet::Int HashSet::SEED1 = 17;
+const HashSet::Int HashSet::SEED2 = 13;
+const int N = 300005;
+// Tree的模板
+template &lt;int N&gt; class TreeBase {
+   // 点集
+   Nodes getNodes(int u);
+   //...
+};
+// 和树有关的部分
+struct Tr : public TreeBase&lt;N&gt; {
+   using Tree::TreeBase&lt;N&gt;::getNodes;
+   // sz: 子树大小 ws: 重儿子 val: 节点字符
+   int sz[N], ws[N], val[N];
+   Tr () { memset(sz,0,sizeof(sz)); memset(ws,0,sizeof(ws)); }
+   // 预处理重儿子
+   void dfs1(int u, int f) {
+       sz[u] = 1; int mv = 0;
+       auto vs = getNodes(u);
+       for (int v: vs) if (v!=f) {
+           dfs1(v,u); sz[u] += sz[v]; 
+           if (checkMax(mv, sz[v])) { ws[u] = v; } 
+       } 
+   }
+   int ans[N];
+   HashSet st[N];
+   void dfs2(int u, int f) {
+       auto vs = getNodes(u);
+       for (int v: vs) if (v!=f) { dfs2(v,u);  }
+       // 从重儿子处继承
+       if (ws[u] != 0) { st[u].inherit(st[ws[u]]);  }
+       // 加上自己的信息
+       st[u].insert( pr(0,0) );
+       // 暴力合并轻儿子
+       for (int v: vs) if (v!=f &amp;&amp; v!=ws[u]) {
+           st[u].merge( st[v] ); 
+       }
+       // 在所有串前面加上该节点自己的字符
+       st[u].push( val[u] ); 
+       ans[u] += st[u].size(); 
+   }
+};
+Tr T;
+int n;
+int main() {
+   n = read(); 
+   repa (i,n) T.ans[i] = read();
+   // 这里字符串的长度不固定所以'a'必须从1开始，不然长度不等的'aa...a'会判重
+   repa (i,n) T.val[i] = readChar()-'a'+1;
+   rep (i,n-1) { int u=sc.n(), v=sc.n(); T.addEdge(u,v); }
+   T.dfs1(1,0);
+   T.dfs2(1,0);
+   int mx=0, cnt=0;
+   repa (i,n) {
+       if (mx &lt; T.ans[i]) { mx = T.ans[i]; cnt = 1; }
+       else if (mx == T.ans[i]) { cnt++; } 
+   }
+   printf(IN,mx); printf(IN,cnt);
+}
+</code></pre> <br></article> <br> <hr class="hr-line"></hr> <div style="font-size: 12px; display: flex;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"></img></a> <div style="margin-left: 10px;">This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License.</a></div></div> <script>hljs.configure({ tabReplace: '  ' }); 
+      hljs.highlightAll(); 
+      loadMath();</script></div></div></body></html>

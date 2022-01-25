@@ -1,0 +1,101 @@
+($article
+  ((tag Tutorial)
+   (title . "CTT 2021 游记")
+   ; (password . "surrender")
+   (hint . "色润得"))
+  (p "CTT ✘")
+  (p "CTDST ✔")
+  (p "先回忆一波题目。")
+  ((h2 (id . "d1t1-lxl")) "D1T1 lxl")
+  (p "给定 $n,k$，构造大小为 $n+1$ 的方阵 $a$ 满足：")
+  (ul
+   (li "$\\forall i, a_{i,i} = 1$")
+   (li "$\\forall i, a_{i,i+1} = 1$")
+   (li "$\\forall i,j(i > j), a_{i,j}=0$")
+   (li
+    "$\\forall i,j(j\\geq i+2, a_{i,j}=1), \\exists k\\in(i,j), a_{i,k} = a_{k,j}=1$")
+   (li "$\\forall i,j(i \\leq j), (A^k)_{i,j}=1$"))
+  (p
+   "令 $m=\\sum_{i,j(j \\geq i+2)}[a_{i,j}=1]$，"
+   (del "则你的分数为")
+   "，你需要保证 $m \\leq nf(k)$，其中 $f(k)$ 是给定的评分参数。")
+  (p "数据范围（分值可能不准确，但大致是 $\\frac{1}{k}$）：")
+  (p "$1900 \\leq n \\leq 2000$")
+  (table
+   (thead (tr (th "数据编号") (th "$k=$") (th "$f(k)=$") (th "分值")))
+   (tbody
+    (tr (td "1") (td "2") (td "7.99") (td "22"))
+    (tr (td "2") (td "3") (td "3.85") (td "16"))
+    (tr (td "3") (td "4") (td "忘了") (td "12"))
+    (tr (td "4") (td "5") (td "忘了") (td "11"))
+    (tr (td "5") (td "6") (td "忘了") (td "9"))
+    (tr (td "6") (td "7") (td "忘了") (td "7"))
+    (tr (td "7") (td "8") (td "$1-\\mathit{eps}$") (td "6"))
+    (tr (td "8") (td "9") (td "$1-\\mathit{eps}$") (td "5"))
+    (tr (td "9") (td "10") (td "$1-\\mathit{eps}$") (td "4"))
+    (tr (td "10") (td "11") (td "$1-\\mathit{eps}$") (td "3"))
+    (tr (td "11") (td "12") (td "$1-\\mathit{eps}$") (td "3"))
+    (tr (td "12") (td "13") (td "$1-\\mathit{eps}$") (td "2"))))
+  ((h2 (id . "d1t2-bruteforce")) "D1T2 bruteforce")
+  (p "定义怪兽为属性序对 $(a,b,c,x,y)$ 。")
+  (p
+   "假设你当前血量为 $w$，那么如果你要大一个属性为 $(a,b,c,x,y)$ 的怪兽，你需要保证 $w \\geq x$，打完后你的血量会变为 $w-x+y$。")
+  (p "你有一个怪兽笼子，初始为空。")
+  (p "给出 $q$ 次操作，一次操作有三种类型：")
+  (ul
+   (li (p "操作一：往笼子中加入属性为 $(a,b,c,d,x,y)$ 的怪兽。"))
+   (li (p "操作二：将第 $i$ 个被加入的怪兽移除笼子，保证这个怪兽此时在笼子中。"))
+   (li
+    (p
+     "操作三：给定 $(A,B,C)$，询问如果要打败笼子中所有满足 $a \\leq A, b \\leq B, c \\leq C$ 的怪兽，初始血量至少为多少。")))
+  (p "$q \\leq 150,000$，每种操作次数最多为 $50,000$。")
+  ((h2 (id . "d1t3-gedit")) "D1T3 gedit")
+  (p
+   "给定 $n,l,r$ 和长度为 $n$ 的序列 $a$，求长度最小的区间 $(i,j)$，满足 $i < l \\leq r < j$ 且不存在 $i' \\leq j'$ 满足 $a_i=a_{i'},a_j=a_{j'}$。")
+  (p "输出长度最小的区间的长度，若不存在，输出 $-1$")
+  ((h2 (id . "d2t1-ezds")) "D2T1 ezds")
+  (p "给定 $n$ 和长度为 $n$ 的序列 $a$，你要进行三种操作：")
+  (ul
+   (li (p "给定 $x$, $\\forall i, a_i \\gets \\min(a_i, x)$"))
+   (li (p "$\\forall i, a_i \\gets a_i + i$"))
+   (li (p "给定 $l,r$，求 $\\sum_{l \\leq i \\leq r}a_i$")))
+  (p "$n,q \\leq 10^5$")
+  (p "要求 polylog")
+  (p "给定 $n$ 个点的有向图，初始有一下两种边：")
+  (ul
+   (li (p "$\\forall i \\in [1, n], i \\to i$"))
+   (li (p "$\\forall i \\in [1, n), i \\to (i + 1)$")))
+  (p "你可以加入 $m$ 条边，使得在这张图上随机游走时 $1 \\to n$ 的期望距离最大。")
+  (p "输出期望的最大值，对 $p$ 取模。")
+  (p "$n, m, p \\leq 10^9, n < p,m < p$")
+  ((h2 (id . "d3t1-tree")) "D3T1 tree")
+  (p "给定一棵以 1 为根的有根树和一个 $2 \\sim n$ 的排列，初始所有结点的颜色都是白的，按照排列的顺序把结点染黑。")
+  (p "定义一个时刻是美丽的，当且仅当所有黑点的子树中都是黑点。")
+  (p "求所有美丽的时刻，黑点构成联通块个数之和。")
+  (p "这个问题太简单了，因此给出 $q$ 次操作，每次操作删除一条边再加入一条边，每次操作完后求出以上问题的答案。")
+  (p "$n,q \\leq 10^5$")
+  ((h2 (id . "d3t2-rand")) "D3T2 rand")
+  (p "给定 $n$ 和长度为 $n$ 的序列 $a$，保证 $a_i$ 在 $[-1000, 1001]$ 中随机生成。")
+  (p
+   "$q$ 次询问，每次询问给出 $l,r$，求 $l \\leq i \\leq j \\leq r$ 使得 $f(i,j)=\\dfrac{(\\sum_{i \\leq k \\leq j}a_k)^2}{r-l+1}$ 最大，以分数形式输出最大的 $f(i,j)$。")
+  (p
+   "数据有两部分：$n \\leq 10^5, q \\leq 3 \\times 10^5$ 以及 $n \\leq 5\\times 10^5, q = 1$。")
+  ((h2 (id . "d3t3-string")) "D3T3 string")
+  (p "牛逼串串题，场上没人过。")
+  (p
+   "给定字符串 $s$，$q$ 次询问，每次询问给出 $s$ 的一个子串 $t$，求有多少本质不同的 $s$ 的子串，满足它循环无限次以后，字典序小于 $t$ 循环无限次。")
+  (p "$n, q \\leq 5 \\times 10^5$，时限 6s。")
+  ((h2 (id . "d4t1-math")) "D4T1 math")
+  (p "没想到吧我连求阶都不会。")
+  (p
+   "转换过后的题意是：给定 $p,T$，$T$ 次询问，每次询问给出 $b$，求最小的正整数 $k$ 满足 $b^{k-1} \\equiv -1 \\pmod p$。")
+  ((h2 (id . "d4t2-tree")) "D4T2 tree")
+  (p
+   "给定一棵树，每个结点 $u$ 有一个布尔变量 $a_u$，定义 $\\operatorname{dis}_r(u)$ 表示以 $r$ 为根时结点 $u$ 所在子树的高度（其实是 SG 值）。")
+  (p "定义")
+  ((script (type . "math/tex; mode=display"))
+   "f(r) = [ \\operatorname{dis}_r(r) < {\\Large\\oplus}_{u} \\operatorname{dis}_r(u) [a_u] ]\n")
+  (p "$q$ 次操作，每次操作为翻转某个 $a_u$ 或者求 $u$ 周围点 $v$ 的 $f(v)$ 之和。")
+  ((h2 (id . "d4t3")) "D4T3")
+  (p "万欧题，成功的区分了 djq 和其他人。")
+  (br))
