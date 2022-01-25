@@ -2237,10 +2237,40 @@
     (p 首先不难发现 `$s_{i-1}$` 一定能是 $s_i$ 的 border。)
     (p 建出 SAM 以后，最长的 border 一定是该结点的祖先中最深的那个。线段树合并维护每个点的 endpos 集合，然后向上倍增即可。)))
 
+  (h3 CF704B)
+  ((div (style . "display: flex; flex-wrap: wrap; align-items: flex-start"))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+      (p `有 $n$ 个元素，第 $i$ 个元素有五个参数 $x_i,a_i,b_i,c_i,d_i$。`)
+      (p `你需要求出一个 $1 \sim n$ 的排列 $p$，满足 $p_1 = s, p_n = e$，同时最小化这个排列的权值。`)
+      (p  `一个排列的权值为 $\sum_{i=1}^{n-1} f(p_i, p_{i+1})$，其中 $f(i,j)$ 的值有两种情况：`)
+      (ul
+        (li `若 $i < j$，则 $f(i,j) = x_i - x_j + c_i + b_j$。`)
+        (li `若 $i > j$，则 $f(i,j) = x_j - x_i + d_i + a_j$。`))
+      (p `$n \le 5 \times 10^3$，$s \ne e$，$1 \le x_1 < x_2 < \cdots < x_n \le 10^9$，$1 \le a_i,b_i,c_i,d_i \le 10^9$。`))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+      (p 相当与要走一条路径，对于每个点，他路径上的前驱位置在它之前时代价为某个值，在它之后时代价为另一值，对于后继也同理。)
+      (p 那就不难得到一个 |$O(n^2)$| 的 dp。由于起点和终点是钦定的，有不少细节需要注意。)))
+
+   (h3 CF704D)
+   ((div (style . "display: flex; flex-wrap: wrap; align-items: flex-start"))
+    ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+     (p 平面上有 $n$ 个点，第 $i$ 个点的坐标为 `$(x_i, y_i)$。`)
+     (p 每个点都要被涂色，涂成红色需要 $r$ 元，涂成蓝色需要 $b$ 元。)
+     (p 另外有 $m$ 个限制，每个限制有两种可能：)
+     (ul
+       (li (code 1 l d) 表示在直线 $x = l$ 上，涂成两种颜色的点的数量之差不超过 $d$。)
+       (li (code 2 l d) 表示在直线 $y = l$ 上，涂成两种颜色的点的数量之差不超过 $d$。))
+     (p 要求构造出一种涂色方案使得满足所有限制且总花费最少，或判断无法构造。)
+     (p `$n,m \le 10^5$。`))
+    ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+     (p 考虑网络流建模)
+     (p 对于每个点，将它所在的行向所在的列连边。这条边的流量范围为 `$[0,1]$` ，代表这个点的颜色为红/蓝)
+     (p 考虑一条线上红蓝差不超过 $d$ 本质上就是红的数量在某个范围内，因此可以连上下界的边)
+     (p 那么一个合法方案就是一个合法的上下界网络流。
+        由于所有点的红蓝代价是相同的，所以最小化代价相当于最小/大化流量)))
+
   (p
-   CF704B
    CF704C
-   CF704D
    CF704E
    CF708D
    CF708E)
@@ -2248,3 +2278,7 @@
    " let totSolved = document.getElementsByTagName(\"h3\").length;\n"
    " document.getElementById(\"fill-tot-solved\").innerText = totSolved;\n")
   (br))
+
+  ((div (style . "display: flex; flex-wrap: wrap; align-items: flex-start"))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box")))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))))
