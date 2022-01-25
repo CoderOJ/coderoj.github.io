@@ -1,0 +1,90 @@
+article h1, article h2 {
+  border-bottom: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  font-family: 'ZCOOL XiaoWei';
+}
+
+article HR {
+  height: 4px;
+  background-image: repeating-linear-gradient(-45deg, rgb(43, 47, 49), rgb(43, 47, 49) 4px, rgba(0, 0, 0, 0) 4px, rgba(0, 0, 0, 0) 8px);
+  border-style: none;
+  opacity: 0.4;
+}
+
+.underline-input {
+  border: none;
+  border-bottom: #099 groove 1px;
+  outline: none;
+  transition-delay: 0s;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+
+.underline-input:focus-visible {
+  border-bottom: #0cc groove 1px;
+  transition-delay: 0s;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
+}
+
+article blockquote {
+  border-left: 5px #cdd solid;
+  padding: 0 20px;
+  margin: auto;
+}
+
+article code {
+  font-family: 'Source Code Pro', "consolas", "Menlo", "monospace", "PingFang SC", "Microsoft YaHei";
+  background-color: #eee !important;
+  border-radius: 4px;
+  padding: 0em 0.2em;
+  font-size: 0.9em;
+}
+
+article h1 {
+  font-size: 40px !important;
+}
+
+article h2 {
+  font-size: 32px !important;
+}
+
+article h3 {
+  font-size: 28px !important;
+}
+
+article h4 {
+  font-size: 24px !important;
+}
+
+article h5 {
+  font-size: 20px !important;
+}
+
+article img {
+  max-width: -moz-available;
+  max-width: -webkit-fill-available;
+}
+
+
+article details, article .box {
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12),0 3px 1px -2px rgba(0,0,0,.2);
+  border-radius: .2rem;
+  padding: 0 .6rem;
+  border-left: 4px solid #0ba;
+  margin: .6em 0;
+  overflow: auto;
+}
+
+article summary {
+  display: block;
+  position: relative;
+  background-color: rgba(0,200,200,.1);
+  margin: 0 -.6rem;
+  padding: .4rem .6rem .4rem .8rem;
+  cursor: pointer;
+  font-family: 'ZCOOL XiaoWei';
+}
