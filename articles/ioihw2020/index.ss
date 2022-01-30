@@ -2283,10 +2283,44 @@
     (p 那么一个合法方案就是一个合法的上下界网络流。
        由于所有点的红蓝代价是相同的，所以最小化代价相当于最小/大化流量)))
 
-  (p
-   CF704E
-   CF708D
-   CF708E)
+  (h3 CF704E)
+  ((div (style . "display: flex; flex-wrap: wrap; align-items: flex-start"))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+    (p 给定一棵树，给出若干条路径，表示从某个时刻开始会有一个点沿着这条路径以某速度连续移动，到终点后消失。)
+    (p 问是否存在一个时刻两个点在同一位置（有可能在边上）。))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+    (p 先考虑序列上的问题。)
+    (p 此时有个经典结论是，最先相交的点一定是某两个相邻的点。那么只要用 set 动态维护所有点的位置即可。)
+    (p 对于树上也是一样，树剖即可。)))
+
+  (h3 CF708D)
+  ((div (style . "display: flex; flex-wrap: wrap; align-items: flex-start"))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+    (p 给定一张 $n$ 个点 $m$ 条边的网络，源点为 $1$，汇点为 $n$。)
+    (p 对于每条边，有容量 $c$，当前流量 $f$。)
+    (p 但这个图是错误的，可能存在 $c < f$，或者流量不守恒的情况。)
+    (p 你每次操作可以将某条边的 $c$ 或 $f$ 加 $1$ 或减 $1$。)
+    (p 请你用最少的操作次数将图变成一个正确的网络。)
+    (p `$n,m \le 100$, $c,f \le 10^6$`，$1$ 没有入边，$n$ 没有出边。))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+    (p 考虑用类似上下界流的办法调整。)
+    (p 对于每条边的 "$c,f$" 分类讨论。如果 $c<f$，那么就先钦定 $c=f$ 并且把代价直接加到答案中。然后每次将这条边的流量 +1/-1 都对应 "$c,f$" 的修改，因此有一个代价（费用）。
+       使用类似上下界网络流的套路，跑最小费用最大流即可。)))
+
+  (h3 CF708E)
+  ((div (style . "display: flex; flex-wrap: wrap; align-items: flex-start"))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+    (p 有一个 `$(n+2) \times m$` 的网格。)
+    (p 除了第一行和最后一行，其他每一行每一天最左边和最右边的格子都有 $p$ 的概率消失。)
+    (p 求 $k$ 天后，网格始终保持连通的概率。)
+    (p `$n,m \le 1.5 \times 10^3$, $k \le 10^5$` ，答案对 $10^9+7$ 取模。))
+   ((div (style . "flex: 1; min-width: 400px") (class . "box"))
+    (p 首先每行剩下的必然是一个区间。然后对于每个区间，根据 $p$ 都有一个形成的概率。)
+    (p 要求联通意味着所有相邻的区间都有交。这样就有了一个 n^5 的 dp。)
+    (p 首先注意到转移的时候来源是全部减去一个前缀和一个后缀，那么就可以二维前缀和优化做到 "O(1)" 转移。)
+    (p 然后观察区间的二维前缀和本质上就是左/右端点的前缀和（因为是区间所以另一个端点一定满足偏序）。这启发我们将相同右端点的所有 dp 值记在一起，又根据对称性，只需要记右端点的即可。)
+    (p 时间复杂度 `$O(nm+k)$`)))
+
   (script
    " let totSolved = document.getElementsByTagName(\"h3\").length;\n"
    " document.getElementById(\"fill-tot-solved\").innerText = totSolved;\n")
