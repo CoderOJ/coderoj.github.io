@@ -5,6 +5,13 @@
 (require "../article.rkt")
 (require "components.rkt")
 
+(define (art-changed name)
+  (define src-dir (format "source/articles/~a/" name))
+  (define dest-dir (format "public/articles/~a/" name))
+  (if (directory-exists? dest-dir)
+    (> (file-or-directory-modify-seconds src-dir)
+       (file-or-directory-modify-seconds dest-dir))
+    #t))
 
 (define ($entry)
   (define conf (dict ($open "source/config.ss")))
@@ -14,10 +21,11 @@
      (lambda (title)
        (printf "parsing ~v\n" title)
        (cons title ($load-article (format "source/articles/~a/index.ss" title))))
-     (cdr (assv 'articles conf))))
+     (filter art-changed
+       (cdr (assv 'articles conf)))))
 
-  ($exec "rm -r public")
-  ($exec "cp -r theme/static public")
+  ; ($exec "rm -r public")
+  ; ($exec "cp -r theme/static public")
   (make-directory* "public/articles")
   ($write "public/index.html" ($html (@/home conf)))
   ($write "public/articles/index.html" ($html (@/articles conf arts)))
