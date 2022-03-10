@@ -13,7 +13,11 @@
        (file-or-directory-modify-seconds dest-dir))
     #t))
 
-(define ($entry)
+(define (init)
+  ($exec "rm -r public")
+  ($exec "cp -r theme/static public"))
+
+(define (gen)
   (define conf (dict ($open "source/config.ss")))
 
   (define arts
@@ -40,5 +44,12 @@
      ($write (format "~aindex.html" dest-dir) ($html (@/articles/title conf (cdr art)))))
    arts)
   (displayln "finish"))
+
+(define ($entry argv)
+  (match argv
+    ['#() (gen)]
+    ['#("gen") (gen)]
+    ['#("init") (init)]
+    [else (printf "error: unkown command ~a\n" argv)]))
 
 (provide $entry)

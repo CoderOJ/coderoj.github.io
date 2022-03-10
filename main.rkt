@@ -1,4 +1,4 @@
 #lang racket
 
 (require "theme/entry.rkt")
-(time ($entry))
+(time ($entry (current-command-line-arguments)))
