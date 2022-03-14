@@ -61,6 +61,8 @@
    (li (p "给定 $l,r$，求 $\\sum_{l \\leq i \\leq r}a_i$")))
   (p "$n,q \\leq 10^5$")
   (p "要求 polylog")
+  (h2 D2T2 datalab)
+  (h2 D2T3 graph)
   (p "给定 $n$ 个点的有向图，初始有一下两种边：")
   (ul
    (li (p "$\\forall i \\in [1, n], i \\to i$"))
