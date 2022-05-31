@@ -46,10 +46,6 @@
 
 (define (domtree->string tree encode)
   (match tree
-    [(list '$inline (? list? child)) 
-     (string-join 
-       (map (lambda (input) (domtree->string input encode)) child) 
-       " ")]
     [(list (list tag props ...) child ...) (dom->string tag props child)]
     [(list (? symbol? tag) child ...) (dom->string tag '() child)]
     [#t "true"] [#f "false"]

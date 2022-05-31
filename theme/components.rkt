@@ -12,14 +12,13 @@
     ((script (src . "/js/element.js")))
     (title ,title)
 
-    ($inline
-     ,(if (memv 'article flags)
-          `(((link (rel . "stylesheet") (type . "text/css") (href . "/css/art.css")))
-            ((link (rel . "stylesheet") (href . "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css")))
-            ((script (src . "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js")))
-            ((script (src . "/js/language.min.js")))
-            ((script (src . "/js/crypto-js.min.js"))))
-          '()))))
+    ,@(if (memv 'article flags)
+        `(((link (rel . "stylesheet") (type . "text/css") (href . "/css/art.css")))
+          ((link (rel . "stylesheet") (href . "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css")))
+          ((script (src . "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js")))
+          ((script (src . "/js/language.min.js")))
+          ((script (src . "/js/crypto-js.min.js"))))
+        '())))
 
 
 (define (@sidebar conf type)
@@ -32,12 +31,11 @@
 
     ((div (class . "sidebar-body"))
      ((ul (class . "sidebar-menu"))
-      ($inline
-       ,(for/list ([url '("/" "/articles")]
-                   [name '(Home Articles)])
-          `((a (href . ,url))
-            ((li (class . "list-item sidebar-menu-item")
-                 (style . ,(if (eqv? type name) "background: #e5e5e5" ""))) ,name)))))
+       ,@(for/list ([url '("/" "/articles")]
+                    [name '(Home Articles)])
+           `((a (href . ,url))
+             ((li (class . "list-item sidebar-menu-item")
+                  (style . ,(if (eqv? type name) "background: #e5e5e5" ""))) ,name))))
 
      ((div (class . "sidebar-about"))
       ((div (style ."text-align: center; font-size: 16px;")) About me)
@@ -45,26 +43,23 @@
       ((div (class . "avatar-rotate") (style . "margin: 2 auto; width: min-content"))
        ((img (class . "avatar") (alt . "Jacder") (src . "/images/avatar.png"))))
       ((ul (class . "sidebar-links"))
-       ($inline
-        ,(let ([socials (cdr (assv 'me conf))])
+       ,@(let ([socials (cdr (assv 'me conf))])
            (for/list ([social socials])
              `((li (class . "sidebar-links-item"))
-               ((a (class . "friend-link") (href . ,(cdr social))) ,(car social))))))))
+               ((a (class . "friend-link") (href . ,(cdr social))) ,(car social)))))))
 
      ((ul (class . "sidebar-links"))
       ((div (style . "text-align: center; font-size: 16px;")) links)
       ((hr (align . "center")))
-      ($inline
-       ,(let ([friends (cdr (assv 'friends conf))])
+      ,@(let ([friends (cdr (assv 'friends conf))])
           (for/list ([friend friends])
             `((li (class . "sidebar-links-item"))
-              ((a (class . "friend-link") (href . ,(cdr friend))) ,(car friend))))))))))
+              ((a (class . "friend-link") (href . ,(cdr friend))) ,(car friend)))))))))
 
 
-(define @footer
-  ((lambda () 
-     (let ([footer ($load-article "source/footer.ss")])
-       (lambda () footer)))))
+(define (@footer)
+  (define footer ($load-article "source/footer.ss"))
+  footer)
 
 
 (define (@article art)
@@ -85,7 +80,7 @@
             (span 提示：  ,(cdr (assv 'hint (car art)))))
            (script "verifyCachedPassword();"))
          (cdr art))
-    ,(@footer)
+    ,@(@footer)
     (script
      "hljs.configure({ tabReplace: '  ' }); 
       hljs.highlightAll(); 
@@ -110,12 +105,11 @@
 
       ((div (class . "root art-list-container"))
        ((ul (class . "art-list"))
-        ($inline
-         ,(for/list ([art arts])
+        ,@(for/list ([art arts])
             `((a (href . ,(format "/articles/~a/" (car art))))
               ((li (class . "list-item art-list-item"))
                ((div (class . "art-list-item-title")) ,(cdr (assv 'title (cadr art))))
-               ,(cons `(div (class . "art-list-item-tag")) (cdr (assv 'tag (cadr art))))))))))))))
+               ,(cons `(div (class . "art-list-item-tag")) (cdr (assv 'tag (cadr art)))))))))))))
 
 
 (define (@/articles/title conf art)
