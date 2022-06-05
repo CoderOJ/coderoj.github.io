@@ -49,7 +49,7 @@ function loadMath() {
   };
   (function () {
     var script = document.createElement('script');
-    script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+    script.src = '//unpkg.com/mathjax@3/es5/tex-mml-chtml.js';
     script.defer = true;
     document.head.appendChild(script);
   })();

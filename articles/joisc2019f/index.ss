@@ -41,6 +41,7 @@ while (true) {
 
   (p (del 是不是觉得合理起来了。))
   (p 这相当于要我们实现同一个进程里的异步通信。)
+  (del (p 如果你的 c++ 支持 (code call/cc)，那么也就做完了。))
   (p 一个直接的做法是在 (code Receive) 函数里维护一个状态机，但这非常丑陋。)
   (p 这时一个叫 (strong continuation) 的东西就很有用。)
 
