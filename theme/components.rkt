@@ -14,8 +14,8 @@
 
     ,@(if (memv 'article flags)
         `(((link (rel . "stylesheet") (type . "text/css") (href . "/css/art.css")))
-          ((link (rel . "stylesheet") (href . "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/atom-one-light.min.css")))
-          ((script (src . "//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js")))
+          ((link (rel . "stylesheet") (href . "//unpkg.com/@highlightjs/cdn-assets@11.5.1/styles/atom-one-light.min.css")))
+          ((script (src . "//unpkg.com/@highlightjs/cdn-assets@11.5.1/highlight.min.js")))
           ((script (src . "/js/language.min.js")))
           ((script (src . "/js/crypto-js.min.js"))))
         '())))
